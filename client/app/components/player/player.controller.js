@@ -4,7 +4,9 @@ export default class playerController {
   }
 
   /* @ngInject */
-  constructor() {
-    this.title = "I am a player component"
+  constructor(PlayerService) {
+
+    PlayerService.getSongs()
+      .then(response => this.songs = response.dataset)
   }
 }
