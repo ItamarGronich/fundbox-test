@@ -17,8 +17,8 @@ export default class FreeMusicArchiveService {
     return this.appConstants.protocol || 'freemusicarchive.org';
   }
 
-  getTracks(limit = 10, genre = 'Folk') {
-    return this.get('tracks.json', {limit: limit, genreHandle: genre});
+  getTracks(limit = 10) {
+    return this.get('recent.json', {limit: limit});
   }
 
   get(path, params) {
@@ -27,7 +27,7 @@ export default class FreeMusicArchiveService {
 
     return this
     .$http
-    .get(`${protocol}://${domain}/${apiUrl}/${path}`, {
+    .get(`${protocol}://${domain}/${path}`, {
       params: Object.assign({ 'api_key': this.appConstants.freeMusicApiKey }, params),
       responseType: 'json'
     })
