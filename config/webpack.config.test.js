@@ -91,6 +91,16 @@ module.exports = function(ENV, options) {
         test: /\.js$/,
         loader: "eslint-loader",
         exclude: [/node_modules/, /bower_components/]
+      }, {
+
+        // Lodash loader.
+        'loader': 'babel-loader',
+        'test': /\.js$/,
+        'exclude': /node_modules/,
+        'query': {
+          'plugins': ['lodash'],
+          'presets': ['es2015']
+        }
       }]
     },
     /**
