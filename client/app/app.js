@@ -13,6 +13,8 @@ import AudioControlsComponent from './components/audioControls/audioControls.com
 import AudioControlsController from './components/audioControls/audioControls.controller';
 import TrackStatusComponent from './components/trackStatus/trackStatus.component';
 import TrackStatusController from './components/trackStatus/trackStatus.controller';
+import AlbumArtComponent from './components/albumArt/albumArt.component';
+import AlbumArtController from './components/albumArt/albumArt.controller';
 
 // Services.
 import FreeMusicArchiveService from './services/FreeMusicArchive.service';
@@ -32,6 +34,10 @@ export default angular.module('fundbox-test', [])
   // Track status component.
   .controller(TrackStatusController.UID, TrackStatusController)
   .component('trackStatus', TrackStatusComponent)
+
+  // Track status component.
+  .controller(AlbumArtController.UID, AlbumArtController)
+  .component('albumArt', AlbumArtComponent)
 
   .service('FreeMusicArchiveService', FreeMusicArchiveService)
   .service('PlayerService', PlayerService)
