@@ -10,6 +10,8 @@ export default {
         <audio-controls type="'pause'"></audio-controls>
         <audio-controls type="'next'"></audio-controls>
         <audio-controls type="'prev'"></audio-controls>
+
+        <track-status track="ctrl.track" current-time="ctrl.currentTime"></track-status>
       </footer>
     </section>
     `,
