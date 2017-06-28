@@ -1,32 +1,47 @@
-import { nth, findIndex } from 'lodash';
-
 export default class playerController {
-  static get UID(){
+
+  // Controller name is set here.
+  static get UID() {
     return "playerController"
   }
 
-  /* @ngInject */
-  constructor(PlayerService, $element, $scope) {
+  // DI.
+  constructor(PlayerService, $scope) {
 
-    this.player = new Audio();
+    // Make accessible to prototype functions.
+    this.PlayerService = PlayerService;
 
-    this.player.onplay = () => null;
-    this.player.onplaying = () => null;
-    this.player.onpause = () => null;
-    this.player.onploadstart = () => null;
-    this.player.oncanplay = () => null;
-    this.player.ontimeupdate = () => {
-      this.currentTime = Math.floor( this.player.currentTime );
+    // The player Node.
+    const player = PlayerService.player;
+
+    player.onplay       = () => null;
+    player.onplaying    = () => null;
+    player.onpause      = () => null;
+    player.onploadstart = () => null;
+    player.oncanplay    = () => null;
+
+    // Every player time change (even on manual change) update local data.
+    player.ontimeupdate = () => {
+      this.updateLocalData();
       $scope.$digest();
     };
 
-    // Get songs. Store them in songs on ctrl.
-    PlayerService.getSongs()
-      .then(response => this.songs = response.aTracks);
+    // Get tracks. Store them in tracks on PLayerSerivce.
+    PlayerService.getTracks()
+      .then(response => PlayerService.storeTracks(response.aTracks));
 
-    // Listen to an audio ctrl event and fire the handler.
+    // Listen to an audio ctrl events and fire the handler.
     $scope.$on('audioControl', (event, type) => this.handleControl(type))
+
+    // Listen to an audio seek events and fire the handler.
     $scope.$on('seek', (event, progressPercentage) => this.seek(progressPercentage))
+  }
+
+  // Gets updated data about the track from the PlayerService.
+  updateLocalData() {
+    this.currentTime = Math.floor(this.PlayerService.currentTime());
+    this.tracks      = this.PlayerService.tracks;
+    this.track       = this.PlayerService.track;
   }
 
   /**
@@ -52,73 +67,12 @@ export default class playerController {
   }
 
   /**
-   *  Load track in player and store metadata.
+   *  Play audio. Play first track if no track loaded already.
    *
-   * @param {Number} index - the index of the current track in the songs array.
-   */
-  loadTrack(index = 0) {
-
-    const songs = this.songs;
-
-    if (songs && songs.length) {
-
-      const track = nth(songs, index);
-
-      // Load the url.
-      this.player.src = track.track_listen_url;
-
-      // Store metadata.
-      this.track = Object.assign(
-        track,
-        { index, totalSeconds: this.timeToSeconds(track.track_duration) }
-      );
-    }
-
-  }
-
-  /**
-   *  Get the total time of the currently loaded song.
-   *
-   * @param {string} time - the human readale string that will be transferred
-   * to seconds.
-   *
-   * @return {Number} integer representing the total nu,mber a seconds a track
-   * lasts.
-   */
-  timeToSeconds(time) {
-    return time.split(':')
-      .reduce(
-        (acc,time,i) => {
-          return i === 0 ? time * 60 : parseInt(acc) + parseInt(time);
-        },
-        0
-      );
-  }
-
-  /**
-   *  Play audio. Play first song if no song loaded already.
-   *
-   * @param {Number} index - the current song index to play.
+   * @param {Number} index - the current track index to play.
    */
   play(index = 0) {
-
-    const
-      songs = this.songs,
-      numberOfSongs = songs ? this.songs.length : 0;
-
-    if (index < 0 || index > numberOfSongs) {
-      throw new Error('Play index can not be negative or greater than numberOfSongs');
-    }
-
-    if (songs && numberOfSongs) {
-      if (!this.player.src || index) {
-        this.loadTrack(index)
-        this.play();
-      } else {
-        this.player.play()
-        .then(e => null, e => null);
-      }
-    }
+    this.PlayerService.play(index);
   }
 
   /**
@@ -128,56 +82,29 @@ export default class playerController {
    * the currently loaded track.
    */
   seek(progressPercentage = 0) {
-
-    if (this.track) {
-      const
-        totalTime = this.track.totalSeconds,
-        goToTime = Math.floor( (totalTime * progressPercentage) / 100 );
-
-        this.player.currentTime = goToTime;
-    }
+    this.PlayerService.seek(progressPercentage)
   }
 
   // Pause the track.
   pause() {
-    this.player.pause();
+    this.PlayerService.pause();
   }
 
- /**
-  * Move to a designated song.
-  *
-  * @param {Number} number - the number of songs to move.
-  */
+  /**
+   * Move to a designated track.
+   *
+   * @param {Number} number - the number of tracks to move.
+   */
   skipTrack(number = 1) {
-
-    const
-      songs = this.songs,
-      numberOfSongs = songs ? this.songs.length : 0;
-
-    if (songs && numberOfSongs) {
-
-      const
-        paused  = this.player.paused,
-
-        // track.index if exists, 0 if negative and -1 if positive.
-        currIdx = this.track ? this.track.index : number < 0 ? 0 : -1,
-
-        // Loop functionality.
-        nextIdx = currIdx < (numberOfSongs - 1) ? currIdx + number : number - 1 ;
-
-      // Load song. Negative will play from the end.
-      this.loadTrack(nextIdx);
-
-      if (!paused) {
-        this.play();
-      }
-    }
+    this.PlayerService.skipTrack(number);
   }
 
+  // Skip one track ahead.
   next() {
     this.skipTrack(1);
   }
 
+  // Skip to the previous track.
   previous() {
     this.skipTrack(-1)
   }
