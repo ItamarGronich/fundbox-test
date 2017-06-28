@@ -20,6 +20,9 @@ export default class playerController {
     player.onploadstart = () => null;
     player.oncanplay    = () => null;
 
+    // Autoplay.
+    player.onended      = () => this.next().play();
+
     // Every player time change (even on manual change) update local data.
     player.ontimeupdate = () => {
       this.updateLocalData();
@@ -31,10 +34,10 @@ export default class playerController {
       .then(response => PlayerService.storeTracks(response.aTracks));
 
     // Listen to an audio ctrl events and fire the handler.
-    $scope.$on('audioControl', (event, type) => this.handleControl(type))
+    $scope.$on('audioControl', (event, type) => this.handleControl(type));
 
     // Listen to an audio seek events and fire the handler.
-    $scope.$on('seek', (event, progressPercentage) => this.seek(progressPercentage))
+    $scope.$on('seek', (event, progressPercentage) => this.seek(progressPercentage));
   }
 
   // Gets updated data about the track from the PlayerService.
@@ -73,21 +76,24 @@ export default class playerController {
    */
   play(index = 0) {
     this.PlayerService.play(index);
+    return this;
   }
 
   /**
    * Go to specific time in track based on percentage.
    *
-   * @param {Number} progressPercentage - the percenages of time to go to in
+   * @param {Number} progressPercentage - the percentages of time to go to in
    * the currently loaded track.
    */
   seek(progressPercentage = 0) {
-    this.PlayerService.seek(progressPercentage)
+    this.PlayerService.seek(progressPercentage);
+    return this;
   }
 
   // Pause the track.
   pause() {
     this.PlayerService.pause();
+    return this;
   }
 
   /**
@@ -97,15 +103,18 @@ export default class playerController {
    */
   skipTrack(number = 1) {
     this.PlayerService.skipTrack(number);
+    return this;
   }
 
   // Skip one track ahead.
   next() {
     this.skipTrack(1);
+    return this;
   }
 
   // Skip to the previous track.
   previous() {
-    this.skipTrack(-1)
+    this.skipTrack(-1);
+    return this;
   }
 }

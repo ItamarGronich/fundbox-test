@@ -5,6 +5,8 @@ export default {
     template: `
     <section class='Player'>
 
+      <album-art img-url="ctrl.track.track_image_file"> </album-art>
+
       <footer class="Controls">
         <audio-controls type="'play'"></audio-controls>
         <audio-controls type="'pause'"></audio-controls>
