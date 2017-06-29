@@ -6,8 +6,8 @@ export default {
     template: `
     <section class="TrackStatus">
       <header class="TrackStatus-header">
-        <span> {{ctrl.track.track_title}} </span>
-        <span> {{ctrl.track.artist_name}} </span>
+        <span class="TrackStatus-trackTitle"> {{ctrl.track.track_title}} </span>
+        <span class="TrackStatus-artistName"> {{ctrl.track.artist_name}} </span>
       </header>
 
       <p class="TrackStatus-progressWrapper">

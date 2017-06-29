@@ -1,6 +1,10 @@
+@import '../../../assets/sass/colors';
+
 
 .TrackStatus-header {
   height: 1em;
+  margin-bottom: 1em;
+  color: $grey-dark;
 }
 
 .TrackStatus-progressWrapper {
@@ -18,4 +22,10 @@
 .TrackStatus-timeWrapper {
   display: flex;
   justify-content: space-between;
+  color: $grey-text;
+}
+
+.TrackStatus-trackTitle {
+  font-weight: 300;
+  margin-right: 16px;
 }
