@@ -106,15 +106,15 @@ export default class PlayerService {
 
     const
       tracks = this.tracks,
-      numberOftracks = tracks ? this.tracks.length : 0;
+      numberOfTracks = tracks ? this.tracks.length : 0;
 
-    if (index < (-1 * numberOftracks) || index > numberOftracks) {
-      throw new Error('Play index can not be negative/positive greater than numberOftracks');
+    if (index < (-1 * numberOfTracks) || index > numberOfTracks) {
+      throw new Error('Play index can not be negative/positive greater than numberOfTracks');
     }
 
-    if (tracks && numberOftracks) {
+    if (tracks && numberOfTracks) {
       if (!this.player.src || index) {
-        this.loadTrack(index)
+        this.loadTrack(index);
         this.play();
       } else {
         this.player.play()
@@ -149,9 +149,9 @@ export default class PlayerService {
 
     const
       tracks = this.tracks,
-      numberOftracks = tracks ? this.tracks.length : 0;
+      numberOfTracks = tracks ? this.tracks.length : 0;
 
-    if (tracks && numberOftracks) {
+    if (tracks && numberOfTracks) {
 
       const
         paused = this.player.paused,
@@ -160,7 +160,7 @@ export default class PlayerService {
         currIdx = this.track ? this.track.index : number < 0 ? 0 : -1,
 
         // Loop functionality.
-        nextIdx = currIdx < (numberOftracks - 1) ? currIdx + number : number - 1;
+        nextIdx = currIdx < (numberOfTracks - 1) ? currIdx + number : number - 1;
 
       // Load track. Negative will play from the end.
       this.loadTrack(nextIdx);

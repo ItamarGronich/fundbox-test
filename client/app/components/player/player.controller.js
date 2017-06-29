@@ -1,3 +1,5 @@
+import { each } from 'lodash';
+
 export default class playerController {
 
   // Controller name is set here.
@@ -10,26 +12,26 @@ export default class playerController {
 
     // Make accessible to prototype functions.
     this.PlayerService = PlayerService;
+    this.$scope = $scope;
 
     // The player Node.
     const player = PlayerService.player;
 
-    player.onplay       = () => null;
-    player.onplaying    = () => null;
-    player.onpause      = () => null;
-    player.onploadstart = () => null;
-    player.oncanplay    = () => null;
+    // Assign handlers to each player event.
+    each([
+      { event: 'play', handler:  this.loggingHadler },
+      { event: 'timeupdate', handler:  this.onTimeUpdate },
+      { event: 'abort', handler: this.loggingHadler },
+      { event: 'playing', handler: this.loggingHadler },
+      { event: 'pause', handler:  this.loggingHadler},
+      { event: 'loadstart', handler: this.loggingHadler },
+      { event: 'loadeddata', handler: this.loggingHadler },
+      { event: 'ended', handler: this.onEnded },
+      { event: 'waiting', handler: this.loggingHadler }
+                                               // Bind to controller instance.
+    ], el => player.addEventListener(el.event, el.handler.bind(this)) );
 
-    // Autoplay.
-    player.onended      = () => this.next().play();
-
-    // Every player time change (even on manual change) update local data.
-    player.ontimeupdate = () => {
-      this.updateLocalData();
-      $scope.$digest();
-    };
-
-    // Get tracks. Store them in tracks on PLayerSerivce.
+    // Get tracks. Store them in tracks on PLayerService.
     PlayerService.getTracks()
       .then(response => PlayerService.storeTracks(response.aTracks));
 
@@ -38,6 +40,31 @@ export default class playerController {
 
     // Listen to an audio seek events and fire the handler.
     $scope.$on('seek', (event, progressPercentage) => this.seek(progressPercentage));
+  }
+
+  /*
+   * =========================
+   *        Handlers.
+   * =========================
+   *
+   * Note: all handlers have their `this` bound to the controller instance.
+   * So this will never be the target element the event is fired on.
+   */
+
+  // Dev util. Logs the event type to the console.
+  loggingHadler(event) {
+    console.log(event.type);
+  }
+
+  // Track ended handler
+  onEnded () {
+    this.next().play();
+  }
+
+  // Every player time change (even on manual change) update local data.
+  onTimeUpdate () {
+    this.updateLocalData();
+    this.$scope.$digest();
   }
 
   // Gets updated data about the track from the PlayerService.

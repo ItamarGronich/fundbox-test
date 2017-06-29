@@ -1,0 +1,21 @@
+
+.TrackStatus-header {
+  height: 1em;
+}
+
+.TrackStatus-progressWrapper {
+  position: relative;
+}
+
+.TrackStatus-progress {
+  width: 100%;
+
+
+  // Undo user agent styles.
+  margin: 0;
+}
+
+.TrackStatus-timeWrapper {
+  display: flex;
+  justify-content: space-between;
+}
