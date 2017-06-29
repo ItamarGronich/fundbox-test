@@ -2,3 +2,20 @@
   height: 100%;
   overflow: hidden;
 }
+
+
+.Controls {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  justify-content: flex-start;
+}
+
+.Controls-buttons {
+  flex-grow: 1;
+}
+
+.Controls-status {
+  flex-grow: 3;
+}
