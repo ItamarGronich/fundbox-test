@@ -48,7 +48,7 @@ export default class playerController {
     $scope.$on('audioControl', (event, type) => this.handleControl(type));
 
     // Listen to an audio seek events and fire the handler.
-    $scope.$on('seek', (event, progressPercentage) => this.seek(progressPercentage));
+    $scope.$on('seek', (event, progressNumber) => this.seek(progressNumber));
   }
 
   /*
@@ -143,8 +143,10 @@ export default class playerController {
    * @param {Number} progressPercentage - the percentages of time to go to in
    * the currently loaded track.
    */
-  seek(progressPercentage = 0) {
-    this.PlayerService.seek(progressPercentage);
+  seek(progressNumber = 0) {
+    console.log('seek');
+
+    this.PlayerService.seek(progressNumber);
     return this;
   }
 

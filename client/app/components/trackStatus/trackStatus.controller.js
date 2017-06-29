@@ -12,14 +12,27 @@ export default class TrackStatusController {
     $scope.$watch(
       () => this.currentTime,
       (currentTime) => {
-        this.progressPercentage = this.calcPercetage(currentTime);
+        this.progressNumber = this.calcProgressNumber(currentTime);
         this.currentHumanTime = this.secondsToHumanTime(currentTime);
+        this.barWidthStyle = this.calcProgressBarWidth(this.progressNumber);
       }
     );
   }
 
   seek() {
-    this.$rootScope.$broadcast('seek', this.progressPercentage)
+    this.$rootScope.$broadcast('seek', this.progressNumber)
+  }
+
+  /**
+   * Returns the percentage of time passed on the loaded track.
+   *
+   * @param {Number} progressPercentage - Representing the current progress
+   * percentage.
+   *
+   * @return {String} 'with : <calculated-number>;' style rule.
+   */
+  calcProgressBarWidth(progressPercentage) {
+    return {'width': `${(progressPercentage / 10)}%`}
   }
 
   /**
@@ -29,8 +42,8 @@ export default class TrackStatusController {
    *
    * @return {Number} The percentage of time passed on loaded track.
    */
-  calcPercetage(currentTime) {
-    return this.track ? (currentTime * 100) / this.track.totalSeconds : 0;
+  calcProgressNumber(currentTime) {
+    return this.track ? Math.floor( (currentTime * 1000) / this.track.totalSeconds ) : 0;
   }
 
   /**

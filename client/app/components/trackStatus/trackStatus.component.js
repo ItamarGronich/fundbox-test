@@ -10,15 +10,16 @@ export default {
         <span class="TrackStatus-artistName"> {{ctrl.track.artist_name}} </span>
       </header>
 
-      <p class="TrackStatus-progressWrapper">
+      <div class="TrackStatus-progressWrapper">
+        <div class="TrackStatus-progressBar" ng-style="ctrl.barWidthStyle"></div>
         <input
         class="TrackStatus-progress"
         type="range"
         min="0"
-        max="100"
-        ng-model="ctrl.progressPercentage"
+        max="1000"
+        ng-model="ctrl.progressNumber"
         ng-mouseup="ctrl.seek()"/>
-      </p>
+      </div>
       
       <p class="TrackStatus-timeWrapper">
         <span class="TrackStatus-currentTime"> {{ctrl.currentHumanTime || '--:--'}} </span>

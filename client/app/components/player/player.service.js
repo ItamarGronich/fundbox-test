@@ -126,15 +126,15 @@ export default class PlayerService {
   /**
    * Go to specific time in track based on percentage.
    *
-   * @param {Number} progressPercentage - the percenages of time to go to in
+   * @param {Number} progressNumber - the percenages of time to go to in
    * the currently loaded track.
    */
-  seek(progressPercentage = 0) {
+  seek(progressNumber = 0) {
 
     if (this.track) {
       const
         totalTime = this.track.totalSeconds,
-        goToTime = Math.floor((totalTime * progressPercentage) / 100);
+        goToTime = Math.floor((totalTime * progressNumber) / 1000);
 
       this.player.currentTime = goToTime;
     }

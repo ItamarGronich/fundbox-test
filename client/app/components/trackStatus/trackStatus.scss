@@ -7,9 +7,6 @@
   color: $grey-dark;
 }
 
-.TrackStatus-progressWrapper {
-  position: relative;
-}
 
 .TrackStatus-progress {
   width: 100%;
@@ -28,4 +25,60 @@
 .TrackStatus-trackTitle {
   font-weight: 300;
   margin-right: 16px;
+}
+
+.TrackStatus-progressWrapper {
+  position: relative;
+
+  margin-bottom: 16px;
+}
+
+.TrackStatus-progress {
+
+  -webkit-appearance: none;
+
+  height: 16px;
+
+  background: transparent;
+  outline: none;
+
+  @mixin thumb-general {
+    width: 1px;
+    height: 4px;
+    background: transparent;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    @include thumb-general;
+  }
+
+  &::-moz-range-thumb {
+    @include thumb-general;
+  }
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: $grey-primary;
+    cursor: pointer;
+  }
+}
+
+.TrackStatus-progressBar {
+  background: $green-primary;
+  height: 4px;
+  width: 100px;
+  position: absolute;
+  top: 6px;
+  left: 0;
+  pointer-events: none;
+  transition: all 200ms linear;
+}
+
+.TrackStatus-progressWrapper:hover .TrackStatus-progressBar {
+
+  background: $green-highlight;
+  top: 5px;
+  height: 6px;
 }

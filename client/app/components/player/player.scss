@@ -20,7 +20,7 @@
         transparent 5px,
         transparent 6px
       ),
-      linear-gradient(0, white 30%, transparent);
+      linear-gradient(0deg, white 30%, transparent);
     -webkit-mask: url('../../../assets/images/background-luminance-mask.svg') 0 0 / contain;
     mask: url('../../../assets/images/background-luminance-mask.svg') 0 0 / contain;
   }
