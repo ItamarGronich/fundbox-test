@@ -6,7 +6,7 @@ import '../../../assets/images/play.svg';
 export default {
     template: `
         <div>
-            <img class="AlbumArt" ng-src="{{ctrl.imgUrl || '/play.svg'}}"/>
+            <img class="AlbumArt" ng-style="ctrl.dimensions" ng-src="{{ctrl.imgUrl || '/play.svg'}}"/>
         </div>
     `,
     controller: controller.UID,
