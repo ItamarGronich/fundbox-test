@@ -14,6 +14,15 @@ export default class playerController {
     this.PlayerService = PlayerService;
     this.$scope = $scope;
 
+    this.playerStates = {
+      PLAYING: 1,
+      PAUSED: 2,
+      LOADING: 3
+    };
+
+    this.loading = false;
+    this.playerState = this.playerStates.PAUSED;
+
     // The player Node.
     const player = PlayerService.player;
 
@@ -22,12 +31,12 @@ export default class playerController {
       { event: 'play', handler:  this.loggingHadler },
       { event: 'timeupdate', handler:  this.onTimeUpdate },
       { event: 'abort', handler: this.loggingHadler },
-      { event: 'playing', handler: this.loggingHadler },
-      { event: 'pause', handler:  this.loggingHadler},
-      { event: 'loadstart', handler: this.loggingHadler },
+      { event: 'playing', handler: this.onPlaying },
+      { event: 'pause', handler:  this.onPause },
+      { event: 'loadstart', handler: this.onLoadStart },
       { event: 'loadeddata', handler: this.loggingHadler },
       { event: 'ended', handler: this.onEnded },
-      { event: 'waiting', handler: this.loggingHadler }
+      { event: 'waiting', handler: this.onWaiting }
                                                // Bind to controller instance.
     ], el => player.addEventListener(el.event, el.handler.bind(this)) );
 
@@ -48,7 +57,7 @@ export default class playerController {
    * =========================
    *
    * Note: all handlers have their `this` bound to the controller instance.
-   * So this will never be the target element the event is fired on.
+   * So `this` will never be the target element the event is fired on.
    */
 
   // Dev util. Logs the event type to the console.
@@ -64,7 +73,28 @@ export default class playerController {
   // Every player time change (even on manual change) update local data.
   onTimeUpdate () {
     this.updateLocalData();
-    this.$scope.$digest();
+  }
+
+  // When loading a new track change to loading state;
+  onLoadStart() {
+    this.playerState = this.playerStates.LOADING;
+    this.updateLocalData();
+  }
+
+  // When finished loading and starting to play change load status.
+  onPlaying() {
+    this.playerState = this.playerStates.PLAYING;
+    this.updateLocalData();
+  }
+
+  onPause() {
+    this.playerState = this.playerStates.PAUSED;
+    this.updateLocalData();
+  }
+
+  onWaiting() {
+    this.playerState = this.playerStates.LOADING;
+    this.updateLocalData();
   }
 
   // Gets updated data about the track from the PlayerService.
@@ -72,6 +102,7 @@ export default class playerController {
     this.currentTime = Math.floor(this.PlayerService.currentTime());
     this.tracks      = this.PlayerService.tracks;
     this.track       = this.PlayerService.track;
+    this.$scope.$digest();
   }
 
   /**

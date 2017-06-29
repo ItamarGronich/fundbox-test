@@ -10,8 +10,9 @@ export default {
       <footer class="Controls">
         <section class="Controls-buttons">
             <audio-controls type="'prev'"></audio-controls>
-            <audio-controls type="'play'"></audio-controls>
-            <audio-controls type="'pause'"></audio-controls>
+            <audio-controls ng-if="ctrl.playerState === ctrl.playerStates.PAUSED" type="'play'"></audio-controls>
+            <audio-controls ng-if="ctrl.playerState === ctrl.playerStates.LOADING" type="'loading'"></audio-controls>
+            <audio-controls ng-if="ctrl.playerState === ctrl.playerStates.PLAYING" type="'pause'"></audio-controls>
             <audio-controls type="'next'"></audio-controls>
         </section>
         

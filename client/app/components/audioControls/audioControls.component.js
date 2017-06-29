@@ -4,8 +4,7 @@ import './audioControls.scss'
 
 export default {
     template: `
-    <button class='{{type}}' ng-click="ctrl.click()">
-      {{ctrl.type}}
+    <button ng-class='ctrl.type' ng-click="ctrl.click()">
     </button>
     `,
     controller: controller.UID,
