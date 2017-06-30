@@ -28,13 +28,10 @@ export default class playerController {
 
     // Assign handlers to each player event.
     each([
-      { event: 'play', handler:  this.loggingHadler },
       { event: 'timeupdate', handler:  this.onTimeUpdate },
-      { event: 'abort', handler: this.loggingHadler },
       { event: 'playing', handler: this.onPlaying },
       { event: 'pause', handler:  this.onPause },
       { event: 'loadstart', handler: this.onLoadStart },
-      { event: 'loadeddata', handler: this.loggingHadler },
       { event: 'ended', handler: this.onEnded },
       { event: 'waiting', handler: this.onWaiting }
                                                // Bind to controller instance.
